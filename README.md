@@ -1,270 +1,76 @@
-<!-- Improved compatibility of back to top link: See: https://github.com/othneildrew/Best-README-Template/pull/73 -->
-<a name="readme-top"></a>
-<!--
-*** Thanks for checking out the Best-README-Template. If you have a suggestion
-*** that would make this better, please fork the repo and create a pull request
-*** or simply open an issue with the tag "enhancement".
-*** Don't forget to give the project a star!
-*** Thanks again! Now go create something AMAZING! :D
--->
-
-
-
-<!-- PROJECT SHIELDS -->
-<!--
-*** I'm using markdown "reference style" links for readability.
-*** Reference links are enclosed in brackets [ ] instead of parentheses ( ).
-*** See the bottom of this document for the declaration of the reference variables
-*** for contributors-url, forks-url, etc. This is an optional, concise syntax you may use.
-*** https://www.markdownguide.org/basic-syntax/#reference-style-links
--->
-[![Contributors][contributors-shield]][contributors-url]
-[![Forks][forks-shield]][forks-url]
-[![Stargazers][stars-shield]][stars-url]
-[![Issues][issues-shield]][issues-url]
-[![MIT License][license-shield]][license-url]
-[![LinkedIn][linkedin-shield]][linkedin-url]
-
+# LIONDataHandler Class
 
+## LION - Lipid Ontology
+The [Lipid Ontology (LION)](https://bioportal.bioontology.org/ontologies/LION) database and the corresponding web tool, [LION/web](http://www.lipidontology.com/), serve as a comprehensive platform for integrating lipid data with biological functions, chemical characteristics, and cellular components. LION categorizes over *50,000 lipid species* into four primary branches:
 
-<!-- PROJECT LOGO -->
-<br />
-<div align="center">
-  <a href="https://github.com/othneildrew/Best-README-Template">
-    <img src="images/logo.png" alt="Logo" width="80" height="80">
-  </a>
+| Category                | Description                                                                                                                                                             |
+|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Lipid Classification**| Each lipid is categorized under one of the following: fatty acids, glycerolipids, glycerophospholipids, sphingolipids, sterol lipids, prenol lipids, saccharolipids, polyketides.                                      |
+| **Function**            | Lipids are assigned functions such as lipid-mediated signalling, membrane component, and lipid storage.                                                                  |
+| **Cellular Component**| Lipids are associated with one cellular component, including nucleus, endoplasmic reticulum, mitochondrion, plasma membrane, chloroplast, lipid droplet, Golgi apparatus, endosome/lysosome, peroxisome.          |
+| **Physico-Chemical Properties**| Lipids may have properties from subcategories: charge headgroup, fatty acid composition, type by bond, intrinsic curvature, fatty acid unsaturation, fatty acid chain length, lateral diffusion, bilayer thickness, chain-melting transition temperature. |
 
-  <h3 align="center">Best-README-Template</h3>
+### Input Data
+Below is a table describing the input data files required by the `LIONDataHandler` class, along with their formats and descriptions:
 
-  <p align="center">
-    An awesome README template to jumpstart your projects!
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template"><strong>Explore the docs »</strong></a>
-    <br />
-    <br />
-    <a href="https://github.com/othneildrew/Best-README-Template">View Demo</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Report Bug</a>
-    ·
-    <a href="https://github.com/othneildrew/Best-README-Template/issues">Request Feature</a>
-  </p>
-</div>
-
-
-
-<!-- TABLE OF CONTENTS -->
-<details>
-  <summary>Table of Contents</summary>
-  <ol>
-    <li>
-      <a href="#about-the-project">About The Project</a>
-      <ul>
-        <li><a href="#built-with">Built With</a></li>
-      </ul>
-    </li>
-    <li>
-      <a href="#getting-started">Getting Started</a>
-      <ul>
-        <li><a href="#prerequisites">Prerequisites</a></li>
-        <li><a href="#installation">Installation</a></li>
-      </ul>
-    </li>
-    <li><a href="#usage">Usage</a></li>
-    <li><a href="#roadmap">Roadmap</a></li>
-    <li><a href="#contributing">Contributing</a></li>
-    <li><a href="#license">License</a></li>
-    <li><a href="#contact">Contact</a></li>
-    <li><a href="#acknowledgments">Acknowledgments</a></li>
-  </ol>
-</details>
+| File Name                   | Format                  | Description                                                                                                                         |
+|-----------------------------|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| **LION_association.txt**    | Tab-separated TXT file  | Contains each lipid name and the associated LION code. Each line represents a unique association between a lipid and its LION code. |
+| **LION.csv**                | CSV file                | Lists all lipids as rows, featuring crucial information such as the lipid's LION code and its parents in the hierarchical structure. |
+| **LipidProgramsHierarchy.csv** | CSV file            | Provides a nested representation of macro categories, micro categories, and lipid programs, illustrating the hierarchical organization of lipid categorizations. |
+| **multi_index_list.pkl**    | Pickle (`.pkl`) file    | Serialized Python object that stores multi-index structures needed for organizing data in the DataFrame according to the LION hierarchy. |
 
+**Usage Notes:**
 
+- **LION_association.txt** and **LION.csv** are essential for mapping lipids to their respective codes and understanding their placement within the hierarchical framework of the LION database.
+- **LipidProgramsHierarchy.csv** is crucial for operations that require knowledge of the nested categorization of lipids, such as filtering and aggregation based on specific categories or levels.
+- **multi_index_list.pkl** is used to rebuild the DataFrame structure used in the analysis, ensuring that the multi-indexed columns correctly represent the hierarchical levels specified in the LION data.
 
-<!-- ABOUT THE PROJECT -->
-## About The Project
 
-[![Product Name Screen Shot][product-screenshot]](https://example.com)
+### Hierarchical Structure
+Similarly to other ontological frameworks in biological sciences, such as the Gene Ontology, LION employs a structured methodology to organize lipid data into these categories. Indeed, one of the significant advantages of the LION database is its ability to generate hierarchical networks that trace pathways from a specific lipid to its four main categories.
 
-There are many great README templates available on GitHub; however, I didn't find one that really suited my needs so I created this enhanced one. I want to create a README template so amazing that it'll be the last one you ever need -- I think this is it.
+![LION Hierarchical Structure](images_for_thesis/lion_tree.png)
+*Figure: Hierarchical structure of LPC 18:1.*
 
-Here's why:
-* Your time should be focused on creating something amazing. A project that solves a problem and helps others
-* You shouldn't be doing the same tasks over and over like creating a README from scratch
-* You should implement DRY principles to the rest of your life :smile:
+Based on this hierarchical structure, LION provides 406 possible classes that can serve as programs when working with the complete lipidomic database. It is important to note that some overlap with the Lipid Families (see `LBADataHandler`) may occur, but this is addressed through collinearity removal. The LION database includes over *250,000* potential connections.
 
-Of course, no one template will serve all projects since your needs may be different. So I'll be adding more in the near future. You may also suggest changes by forking this repo and creating a pull request or opening an issue. Thanks to all the people have contributed to expanding this template!
+#### How to extract Lipid Programs from LION?
 
-Use the `BLANK_README.md` to get started.
+##### **`tabular_LION_database()`** 
+This method is designed to construct a tabular representation of the LION database. This table maps each lipid to its corresponding Lipid Programs (LPs) based on hierarchical classifications and relationships defined within the LION database. Below is a schematic overview of the method and its key interactions:
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+1. **Prepare the DataFrame**:
+    - The method begins by setting up a DataFrame with a columns' multi-index structure that represents various hierarchical levels of lipid categorization.
+    - This structure allows for a detailed classification and placement of each lipid based on its hierarchical relationships within the database. It is obtained straightforwardly from the `LipidProgramsHierarchy.csv` file given as input to the class.
+    - The multi-index results in a 6-levels structure, where:
+        - the first 2 levels are for Macro (Lipid Classification, Function, Cellular Component and Physico-Chemical Properties) and Micro (Lipid Classification, Function, Cellular Component and the subcategories of PC properties: charge headgroup, fatty acid composition, type by bond, intrinsic curvature, fatty acid unsaturation, fatty acid chain length, lateral diffusion, bilayer thickness, chain-melting transition temperature) categories.
+        - the remaining 4 levels are the classes (i.e. the lipid programs) that belong to the aforementioned categories.
 
+    ![Header MultiIndex](images_for_thesis/multi_index.png)
+    *Figure: Metti uno screen di un multi-index.*
 
+2. **Identify Marker Nodes**:
+    - **Marker nodes**, which are key hierarchical transitions or bifurcation points in the lipid ontology, are identified for each lipid (`_find_marker_nodes` and `_process_marker_nodes`). This identification is crucial for understanding how lipids relate to different LPs.
+    - To identify marker nodes, for each given node in the tree-like hierarchy, we identify **BiologicalParents** and **StepParents** (`__split_LP_parents()`), respectively those that belong to the same category, and those that instead belong to a different category. This is the *bifurcation* we refer to. The identification process involves recursively traversing the lipid hierarchy and marking transitions where lipid categorizations change or bifurcate.
+    - Therefore, marker nodes are all those LPs from which a *path-back* to the main categories is uniquely defined. The figure depicts a representative example.
+    - For each lipid, the method identifies the presence of marker nodes at various levels of the hierarchy and creates a binary membership mask. Specifically, marker nodes represent the *ones*. For each lipid *i* and lipid program *j*, the membership mask is 1 if lipid *i* belongs to LP *j*. This mask is then used to populate the DataFrame, indicating the association of each lipid with various LPs based on the presence or absence of specific marker nodes.
 
-### Built With
+    ![Marker Nodes](images_for_thesis/lion_marker_nodes.png)
+    *Figure: Metti lo schemino che avevi fatto a mano sul quaderno per evidenziare i marker nodes.*
 
-This section should list any major frameworks/libraries used to bootstrap your project. Leave any add-ons/plugins for the acknowledgements section. Here are a few examples.
+##### **Interaction with the tabular LION database**:
+Once the tabular version of the database is built, the user can interact with it at the level they want.
+The `filter_and_aggregate()` method is designed to process the tabular representation of the LION database by filtering and aggregating data based on the user's needs.
 
-* [![Next][Next.js]][Next-url]
-* [![React][React.js]][React-url]
-* [![Vue][Vue.js]][Vue-url]
-* [![Angular][Angular.io]][Angular-url]
-* [![Svelte][Svelte.dev]][Svelte-url]
-* [![Laravel][Laravel.com]][Laravel-url]
-* [![Bootstrap][Bootstrap.com]][Bootstrap-url]
-* [![JQuery][JQuery.com]][JQuery-url]
+1. **Filtering**: Select columns in the data that match the input macro categories and, if applicable, micro categories. The user inputs the categories they want to keep into account in the analysis (`macro_categories`) and the subcategories for physico-chemical properties (`macro_categories`).
+2. **Aggregating**: Summarize the data at a specified refinement level: indeed, the hierarchical structure provides (at most) 4 levels of refinement (increasigly higher level of specificity of LPs). This aggregation is designed to ensure that each lipid's association with categories at this level is clear and binary (0 or 1).
 
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
+![Extraction of LPs from LION](images_for_thesis/lion_mat_PS.png)
+*Figure: Hierarchical structure of PS 45:7 and the process of extracting LPs.*
 
+#### Handling more specific annotations
+To conclude, an important consideration is the extent to which measurements can be detailed. Typically, lipids are annotated based on their lipid family, the total number of carbon atoms and double bonds across all fatty acyl chains. This general nomenclature, however, does not reveal the distribution of these carbon atoms and double bonds among fatty acyl chains. In contrast, the LION database provides such higher level of specificity. If we consider the *shrinked* case, LION database presents *7250 lipids*, the extended version is istead made up of more than *60000 lipids*. Here, an example of the different nomenclatures and the shrinking procedure.
 
-
-<!-- GETTING STARTED -->
-## Getting Started
-
-This is an example of how you may give instructions on setting up your project locally.
-To get a local copy up and running follow these simple example steps.
-
-### Prerequisites
-
-This is an example of how to list things you need to use the software and how to install them.
-* npm
-  ```sh
-  npm install npm@latest -g
-  ```
-
-### Installation
-
-_Below is an example of how you can instruct your audience on installing and setting up your app. This template doesn't rely on any external dependencies or services._
-
-1. Get a free API Key at [https://example.com](https://example.com)
-2. Clone the repo
-   ```sh
-   git clone https://github.com/your_username_/Project-Name.git
-   ```
-3. Install NPM packages
-   ```sh
-   npm install
-   ```
-4. Enter your API in `config.js`
-   ```js
-   const API_KEY = 'ENTER YOUR API';
-   ```
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- USAGE EXAMPLES -->
-## Usage
-
-Use this space to show useful examples of how a project can be used. Additional screenshots, code examples and demos work well in this space. You may also link to more resources.
-
-_For more examples, please refer to the [Documentation](https://example.com)_
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ROADMAP -->
-## Roadmap
-
-- [x] Add Changelog
-- [x] Add back to top links
-- [ ] Add Additional Templates w/ Examples
-- [ ] Add "components" document to easily copy & paste sections of the readme
-- [ ] Multi-language Support
-    - [ ] Chinese
-    - [ ] Spanish
-
-See the [open issues](https://github.com/othneildrew/Best-README-Template/issues) for a full list of proposed features (and known issues).
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- CONTRIBUTING -->
-## Contributing
-
-Contributions are what make the open source community such an amazing place to learn, inspire, and create. Any contributions you make are **greatly appreciated**.
-
-If you have a suggestion that would make this better, please fork the repo and create a pull request. You can also simply open an issue with the tag "enhancement".
-Don't forget to give the project a star! Thanks again!
-
-1. Fork the Project
-2. Create your Feature Branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your Changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the Branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- LICENSE -->
-## License
-
-Distributed under the MIT License. See `LICENSE.txt` for more information.
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- CONTACT -->
-## Contact
-
-Your Name - [@your_twitter](https://twitter.com/your_username) - email@example.com
-
-Project Link: [https://github.com/your_username/repo_name](https://github.com/your_username/repo_name)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- ACKNOWLEDGMENTS -->
-## Acknowledgments
-
-Use this space to list resources you find helpful and would like to give credit to. I've included a few of my favorites to kick things off!
-
-* [Choose an Open Source License](https://choosealicense.com)
-* [GitHub Emoji Cheat Sheet](https://www.webpagefx.com/tools/emoji-cheat-sheet)
-* [Malven's Flexbox Cheatsheet](https://flexbox.malven.co/)
-* [Malven's Grid Cheatsheet](https://grid.malven.co/)
-* [Img Shields](https://shields.io)
-* [GitHub Pages](https://pages.github.com)
-* [Font Awesome](https://fontawesome.com)
-* [React Icons](https://react-icons.github.io/react-icons/search)
-
-<p align="right">(<a href="#readme-top">back to top</a>)</p>
-
-
-
-<!-- MARKDOWN LINKS & IMAGES -->
-<!-- https://www.markdownguide.org/basic-syntax/#reference-style-links -->
-[contributors-shield]: https://img.shields.io/github/contributors/othneildrew/Best-README-Template.svg?style=for-the-badge
-[contributors-url]: https://github.com/othneildrew/Best-README-Template/graphs/contributors
-[forks-shield]: https://img.shields.io/github/forks/othneildrew/Best-README-Template.svg?style=for-the-badge
-[forks-url]: https://github.com/othneildrew/Best-README-Template/network/members
-[stars-shield]: https://img.shields.io/github/stars/othneildrew/Best-README-Template.svg?style=for-the-badge
-[stars-url]: https://github.com/othneildrew/Best-README-Template/stargazers
-[issues-shield]: https://img.shields.io/github/issues/othneildrew/Best-README-Template.svg?style=for-the-badge
-[issues-url]: https://github.com/othneildrew/Best-README-Template/issues
-[license-shield]: https://img.shields.io/github/license/othneildrew/Best-README-Template.svg?style=for-the-badge
-[license-url]: https://github.com/othneildrew/Best-README-Template/blob/master/LICENSE.txt
-[linkedin-shield]: https://img.shields.io/badge/-LinkedIn-black.svg?style=for-the-badge&logo=linkedin&colorB=555
-[linkedin-url]: https://linkedin.com/in/othneildrew
-[product-screenshot]: images/screenshot.png
-[Next.js]: https://img.shields.io/badge/next.js-000000?style=for-the-badge&logo=nextdotjs&logoColor=white
-[Next-url]: https://nextjs.org/
-[React.js]: https://img.shields.io/badge/React-20232A?style=for-the-badge&logo=react&logoColor=61DAFB
-[React-url]: https://reactjs.org/
-[Vue.js]: https://img.shields.io/badge/Vue.js-35495E?style=for-the-badge&logo=vuedotjs&logoColor=4FC08D
-[Vue-url]: https://vuejs.org/
-[Angular.io]: https://img.shields.io/badge/Angular-DD0031?style=for-the-badge&logo=angular&logoColor=white
-[Angular-url]: https://angular.io/
-[Svelte.dev]: https://img.shields.io/badge/Svelte-4A4A55?style=for-the-badge&logo=svelte&logoColor=FF3E00
-[Svelte-url]: https://svelte.dev/
-[Laravel.com]: https://img.shields.io/badge/Laravel-FF2D20?style=for-the-badge&logo=laravel&logoColor=white
-[Laravel-url]: https://laravel.com
-[Bootstrap.com]: https://img.shields.io/badge/Bootstrap-563D7C?style=for-the-badge&logo=bootstrap&logoColor=white
-[Bootstrap-url]: https://getbootstrap.com
-[JQuery.com]: https://img.shields.io/badge/jQuery-0769AD?style=for-the-badge&logo=jquery&logoColor=white
-[JQuery-url]: https://jquery.com 
+![Shrinking of LION Database](images_for_thesis/shrinking_of_lion_PS.png)
+*Figure: Shrinkage procedure applied to the LION database.*
