@@ -32,7 +32,7 @@ Similarly to other ontological frameworks in biological sciences, such as the Ge
 
 ![LION Hierarchical Structure](./images/lion_tree_PS.png)
 
-*Figure: Hierarchical structure of PS 45:7.*
+*Figure: Hierarchical Tree of PS 45:7. This illustration depicts the structured categorization of the lipid, with each category represented by a unique color — blue for physical and chemical properties, pink for lipid families, orange for cellular components, and green for functions. At the top of the hierarchy is the lipid to be analyzed: the deeper one walks the hierarchy, the coarser the classification.*
 
 Based on this hierarchical structure, LION provides 406 possible classes that can serve as programs when working with the complete lipidomic database. It is important to note that some overlap with the Lipid Families (see `LBADataHandler`) may occur, but this is addressed through collinearity removal. The LION database includes over *250,000* potential connections.
 
@@ -41,7 +41,7 @@ Based on this hierarchical structure, LION provides 406 possible classes that ca
 ##### **`tabular_LION_database()`** 
 This method is designed to construct a tabular representation of the LION database. This table maps each lipid to its corresponding Lipid Programs (LPs) based on hierarchical classifications and relationships defined within the LION database. Below is a schematic overview of the method and its key interactions:
 
-1. **Prepare the DataFrame**:
+1. **DataFrame Preparation**:
     - The method begins by setting up a DataFrame with a columns' multi-index structure that represents various hierarchical levels of lipid categorization.
     - This structure allows for a detailed classification and placement of each lipid based on its hierarchical relationships within the database. It is obtained straightforwardly from the `LipidProgramsHierarchy.csv` file given as input to the class.
     - The multi-index results in a 6-levels structure, where:
@@ -50,9 +50,9 @@ This method is designed to construct a tabular representation of the LION databa
 
     ![Header MultiIndex](./images/multi_index.png)
     
-    *Figure: Metti uno screen di un multi-index.*
+    *Figure: The figure illustrates the multi-index structure of the DataFrame representing the LION database in tabular format. For readability, columns are arranged over three lines, though in practice, they appear on a single line. The first two levels of the multi-index correspond to categories and macrocategories, denoted with "CAT." While macrocategories are labeled in the figure, subcategories for physico-chemical properties are identifiable via codes listed in `LipidProgramsHierarchy.csv`. Following these are four levels detailing LPs, with mappings also available in `LipidProgramsHierarchy.csv`. This layered structure underscores the utility of the multi-index format.*
 
-2. **Identify Marker Nodes**:
+2. **Marker Nodes Identification**:
     - **Marker nodes**, which are key hierarchical transitions or bifurcation points in the lipid ontology, are identified for each lipid (`_find_marker_nodes` and `_process_marker_nodes`). This identification is crucial for understanding how lipids relate to different LPs.
     - To identify marker nodes, for each given node in the tree-like hierarchy, we identify **BiologicalParents** and **StepParents** (`__split_LP_parents()`), respectively those that belong to the same category, and those that instead belong to a different category. This is the *bifurcation* we refer to. The identification process involves recursively traversing the lipid hierarchy and marking transitions where lipid categorizations change or bifurcate.
     - Therefore, marker nodes are all those LPs from which a *path-back* to the main categories is uniquely defined. The figure depicts a representative example.
@@ -60,7 +60,7 @@ This method is designed to construct a tabular representation of the LION databa
 
     ![Marker Nodes](./images/lion_marker_nodes.png)
     
-    *Figure: Metti lo schemino che avevi fatto a mano sul quaderno per evidenziare i marker nodes.*
+    *Figure: The figure presents the hierarchical structure for PS 45:7, highlighting marker nodes which characterize distinct lipid programs. Bold boxes indicate marker nodes, with dashed lines depicting "step-parenthood" and solid lines showing "biological-parenthood". Each marker node distinctly traces a path to its respective category, ensuring no ambiguity.*
 
 ##### **Interaction with the tabular LION database**:
 Once the tabular version of the database is built, the user can interact with it at the level they want.
@@ -71,11 +71,13 @@ The `filter_and_aggregate()` method is designed to process the tabular represent
 
 ![Extraction of LPs from LION](./images/lion_mat_PS.png)
 
-*Figure: Hierarchical structure of PS 45:7 and the process of extracting LPs.*
+![Extraction of LPs from LION](./images/tabular_LION.png)
+
+*Figure: Upon selecting a refinement level (here, the specific 4th level marker nodes are shown), each row of the tabular DataFrame is populated. Users also have the option to adjust the cropping and aggregation of columns according to their desired focus category.*
 
 #### Handling more specific annotations
 To conclude, an important consideration is the extent to which measurements can be detailed. Typically, lipids are annotated based on their lipid family, the total number of carbon atoms and double bonds across all fatty acyl chains. This general nomenclature, however, does not reveal the distribution of these carbon atoms and double bonds among fatty acyl chains. In contrast, the LION database provides such higher level of specificity. If we consider the *shrinked* case, LION database presents *7250 lipids*, the extended version is istead made up of more than *60000 lipids*. Here, an example of the different nomenclatures and the shrinking procedure.
 
 ![Shrinking of LION Database](./images/shrinking_of_lion_PS.png)
 
-*Figure: Shrinkage procedure applied to the LION database.*
+*Figure: Shrinkage procedure applied to some lipids of the LION database. The figure show the recurring example of this documentation: PS 45:7.*
