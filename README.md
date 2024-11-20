@@ -15,9 +15,9 @@ Below is a table describing the input data files required by the `LIONDataHandle
 
 | File Name                   | Format                  | Description                                                                                                                         |
 |-----------------------------|-------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
-| **LION_association.txt**    | Tab-separated TXT file  | Contains each lipid name and the associated LION code. Each line represents a unique association between a lipid and its LION code. |
-| **LION.csv**                | CSV file                | Lists all lipids as rows, featuring crucial information such as the lipid's LION code and its parents in the hierarchical structure. |
-| **LipidProgramsHierarchy.csv** | CSV file            | Provides a nested representation of macro categories, micro categories, and lipid programs, illustrating the hierarchical organization of lipid categorizations. |
+| [**LION_association.txt**](https://github.com/martijnmolenaar/LION-web/blob/master/OntologyApp/data/20190704%20LION_association.txt)    | Tab-separated TXT file  | Contains each lipid name and the associated LION code. Each line represents a unique association between a lipid and its LION code. |
+| [**LION.csv**](https://bioportal.bioontology.org/ontologies/LION/?p=summary)                | CSV file                | Lists all lipids as rows, featuring crucial information such as the lipid's LION code and its parents in the hierarchical structure. |
+| [**LipidProgramsHierarchy.csv**](https://github.com/martijnmolenaar/LION-web/blob/master/OntologyApp/data/20191010%20LION_tree_structure.R) | CSV file            | Provides a nested representation of macro categories, micro categories, and lipid programs, illustrating the hierarchical organization of lipid categorizations. |
 | **multi_index_list.pkl**    | Pickle (`.pkl`) file    | Serialized Python object that stores multi-index structures needed for organizing data in the DataFrame according to the LION hierarchy. |
 
 **Usage Notes:**
