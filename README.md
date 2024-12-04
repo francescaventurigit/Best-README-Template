@@ -58,4 +58,5 @@ Note: The class automatically identifies lipid columns based on their naming pat
         ```
     - `to_anndata`: Convert processed data to AnnData format.
 
+The verbose output while processing data will appear as follows:
 ![LBA_pipeline](./images/LBADataHandler_pipeline.png)
