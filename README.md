@@ -17,7 +17,7 @@ The class processes MALDI-MSI lipidomics data structured as a pandas DataFrame w
 
 1. **Row Structure**: Each row represents a voxel (3D pixel) from brain slices in the dataset.
 2. **Column Structure**:
-    a. **Lipid Expression Columns**
+    - **Lipid Expression Columns**
         - Format: `[Family] [Carbon]:[Double_Bonds]`
         - Example: `PC 36:0` where:
             - `PC`: Lipid family abbreviation
@@ -25,7 +25,7 @@ The class processes MALDI-MSI lipidomics data structured as a pandas DataFrame w
             - `0`: Number of double bonds
         - Naming must follow this convention for proper lipid family recognition
 
-    b. **Metadata Columns**
+    - **Metadata Columns**
         - All non-lipid columns
         - Include:
             - Spatial coordinates (x, y, z) in the ABA common coordinate framework
