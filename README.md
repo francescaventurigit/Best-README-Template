@@ -9,7 +9,7 @@ A significant challenge in MALDI-MSI analysis has been noise measurement and con
 
 This comprehensive processing pipeline forms the foundation of the Adult Mouse Lipid Brain Atlas (LBA), providing a standardized framework for lipid analysis across brain sections. The LBA project, curated by the [Laboratory of Brain Development and Biological Data Science at EPFL](https://www.epfl.ch/labs/nsbl/), aims to provide a standardized reference system for lipidomic data. As an atlas, it emphasizes the precise localization of lipid expressions within the brain, which is crucial for understanding the organ’s functional architecture and the interactions between its components.
 
-aggiungi immagine di MALDI e uMAIA della tesi
+![LBA_pipeline](./images/lba.png)
 
 ## Input Data Requirements
 
@@ -20,7 +20,7 @@ The class processes MALDI-MSI lipidomics data structured as a pandas DataFrame w
     - **Lipid Expression Columns**
         - Format: `[Family] [Carbon]:[Double_Bonds]`
         - Example: `PC 36:0` where:
-            - `PC`: Lipid family abbreviation
+            - `PC`: Lipid family abbreviation, beginning with a capital letter
             - `36`: Number of carbon atoms
             - `0`: Number of double bonds
         - Naming must follow this convention for proper lipid family recognition
@@ -37,31 +37,25 @@ Note: The class automatically identifies lipid columns based on their naming pat
 ## Class Arguments
 
 - `df`: pandas DataFrame containing lipid expression data and metadata
-- `masks_path`: Directory path for storing mask data and generated .lmt files (default: './masks')
-- `initial_format`: Input data format ('log', 'exp', 'norm_exp') (default: 'log')
-- `final_format`: Desired output format ('log', 'exp', 'norm_exp') (default: 'norm_exp')
-- `amplify`: Boolean flag to multiply normalized data by 1000 to mimic gene raw counts (default: True)
+- `masks_path`: Directory path for storing mask data and generated .lmt files (default: `./masks`)
+- `initial_format`: Input data format ('log', 'exp', 'norm_exp') (default: `log`)
+- `final_format`: Desired output format ('log', 'exp', 'norm_exp') (default: `norm_exp`)
+- `amplify`: Boolean flag to multiply normalized data by 1000 to mimic gene raw counts (default: `True`)
 
-## Usage Notes
+## Pre-Processing Pipeline
+1. **Default Initialization:**
+    - `__config__`: Configuration happens and raw data are loaded.
+    - `_extract_lipid_families`: From the data, all the possible lipid families are extracted and saved as attribute.
+    - `__fill_lipid_meta_cols`: Lipid columns and metadata columns are extracted.
+    - `_transform_data`: Transition from initial to final format happens.
+    - `_raw_counts_like`: Raw-counts (*1000) amplification happens (if necessary)
 
-### Creating .lmt Files
-The class generates a lipid family mapping file (`_lipid_families.lmt`) using `create_family_lmt()`:
-```python
-handler = LBADataHandler(df)
-handler.create_family_lmt()
-```
-The .lmt file maps lipid families to their member lipids in a tab-delimited format:
-```
-FamilyA    Lipid1    Lipid2
-FamilyB    Lipid3    Lipid4
-```
+2. **Additional capabilies:**
+    - `create_family_lmt`: The class generates an .lmt (Lipid Matrix Transposed) file that maps lipid families to their associated lipids (tab-delimited format):
+        ```
+        FamilyA    Lipid1    Lipid2
+        FamilyB    Lipid3    Lipid4
+        ```
+    - `to_anndata`: Convert processed data to AnnData format.
 
-### AnnData Integration
-Convert processed data to AnnData format using `to_anndata()`:
-```python
-adata = handler.to_anndata()
-```
-The resulting AnnData object contains:
-- `.X`: Lipid expression matrix (float32)
-- `.obs`: Metadata and additional columns
-- Automatic handling of data transformations based on specified formats
+![LBA_pipeline](./images/LBADataHandler_pipeline.png)
